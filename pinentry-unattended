@@ -1,0 +1,11 @@
+#!/bin/zsh
+if [[ "$PINENTRY_USER_DATA" = "interactive" ]]; then
+    if [[ -n "$(command -v pinentry-tty)" ]]; then
+        exec $(command -v pinentry-tty) "$@"
+    elif [[ -n "$(command -v pinentry-curses)" ]]; then
+        exec $(command -v pinentry-curses) "$@"
+    else
+        echo "Couldn't find pinentry program"
+    fi
+fi
+exit 1

@@ -1,0 +1,17 @@
+#!/usr/bin/env zsh
+if [[ -n "$1" ]]; then
+    command ssh-add "${@}"
+else
+    command gpg-connect-agent "scd restart" /bye > /dev/null
+    local ID="$(command gpg-connect-agent "scd serialno" /bye \
+        | command awk '/SERIALNO/{print $3; exit}')"
+    if [[ -z "$ID" ]]; then
+        command ssh-add
+    else
+        command gpg-connect-agent "updatestartuptty" /bye > /dev/null 2>&1
+        export PINENTRY_USER_DATA="interactive"
+        command gpg-connect-agent "scd checkpin $ID" /bye \
+            | command grep OK > /dev/null 2>&1
+        unset PINENTRY_USER_DATA
+    fi
+fi
