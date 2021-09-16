@@ -12,6 +12,7 @@ else
         export PINENTRY_USER_DATA="interactive"
         command gpg-connect-agent "scd checkpin $ID" /bye \
             | command grep OK > /dev/null 2>&1
+        command gpg -d /dev/null > /dev/null 2>&1
         unset PINENTRY_USER_DATA
     fi
 fi
